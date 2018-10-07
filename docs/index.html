@@ -38,6 +38,7 @@ function binalize(src) {
   return dst;
 }
 
+/*
 function processVideo() {
     try {
         let begin = Date.now();
@@ -53,6 +54,7 @@ function processVideo() {
         console.error(err);
     }
 };
+*/
 
 function initialize() {
  let video = document.getElementById('videoInput');
@@ -60,6 +62,8 @@ function initialize() {
  dst = new cv.Mat(video.height, video.width, cv.CV_8UC1);
  roi = new cv.Rect(video.width/2 - video.width/4, video.height/2 - video.height/4,
    video.width/2, video.height/2);
+
+   video.addEventListener('click', captureFont);
 }
 
 function start() {
@@ -85,6 +89,7 @@ function captureFont() {
   cv.imshow('canvasOutput', dst);
   dst.delete();
 }
+
 function onOpenCvReady() {
   cv['onRuntimeInitialized'] = () => {
     document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
