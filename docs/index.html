@@ -25,7 +25,6 @@ const FPS = 30;
 let localStream = null;
 let src = null;
 let rois = [];
-let dst = null;
 let cap = null;
 let roi = null;
 
@@ -37,6 +36,10 @@ function binalize(roi0, roi1, roi2) {
 
 function processVideo() {
   try {
+    if (! localStream) {
+      src.delete();
+      return;
+    }
       let begin = Date.now();
         // start processing.
       cap.read(src);
@@ -55,8 +58,6 @@ function processVideo() {
 
 function initialize() {
   let video = document.getElementById('videoInput');
-  src = new cv.Mat(video.height, video.width, cv.CV_8UC4);
-  dst = new cv.Mat(video.height, video.width, cv.CV_8UC1);
   roi = new cv.Rect(video.width/2 - video.width/4, video.height/2 - video.height/4,
    video.width/2, video.height/2);
   video.addEventListener('click', captureFont);
@@ -70,6 +71,7 @@ function start() {
       video.srcObject = stream;
       video.play();
       localStream = stream;
+      src = new cv.Mat(video.height, video.width, cv.CV_8UC4);
       cap = new cv.VideoCapture(video);
       setTimeout(processVideo, 0);
   });
@@ -77,6 +79,7 @@ function start() {
 
 function stop() {
   localStream.getVideoTracks()[0].stop();
+  localStream = null;
   cap = null;
   while (rois.length > 0) {
     let it = rois.shift();
@@ -96,8 +99,6 @@ function onOpenCvReady() {
     initialize();
   }
 }
-
-
 
 </script>
 <script async src="./opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
