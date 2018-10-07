@@ -44,12 +44,12 @@ function binalize(src) {
   let labels = new cv.Mat();
   cv.kmeans(vec, 2, labels, criteria, 1, cv.KMEANS_PP_CENTERS);
   vec.delete();
- buffer = [];
- for (let i = 0; i < labels.rows; ++i) {
-   buffer.push(labels.intAt(i) * 255);
- }
- labels.delete();
- return cv.matFromArray(work0.rows, work0.cols, cv.CV_8UC1, buffer);
+  buffer = [];
+  for (let i = 0; i < labels.rows; ++i) {
+    buffer.push(labels.intAt(i) * 255);
+  }
+  labels.delete();
+  return cv.matFromArray(work0.rows, work0.cols, cv.CV_8UC1, buffer);
 }
 
 function processVideo() {
@@ -79,7 +79,7 @@ function initialize() {
 
 function start() {
   let video = document.getElementById("videoInput");
-  navigator.mediaDevices.getUserMedia({video: true, audio: false})
+  navigator.mediaDevices.getUserMedia({video: {facingMode:'environment'}, audio: false})
     .then(function(stream) {
       video.srcObject = stream;
       video.play();
