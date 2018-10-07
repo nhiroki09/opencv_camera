@@ -36,31 +36,30 @@ function binalize(roi0, roi1, roi2) {
 }
 
 function processVideo() {
-    try {
-        let begin = Date.now();
+  try {
+      let begin = Date.now();
         // start processing.
-        cap.read(src);
-        if (rois.length == 3) {
-          let it = rois.shift();
-          it.delete();
-        }        
-        rois.push(src.roi(roi));
-        // schedule the next one.
-        let delay = 1000/FPS - (Date.now() - begin);
-        setTimeout(processVideo, delay);
-    } catch (err) {
-        console.error(err);
-    }
+      cap.read(src);
+      if (rois.length == 3) {
+        let it = rois.shift()
+        it.delete();
+      }
+      rois.push(src.roi(roi));
+      // schedule the next one.
+      let delay = 1000/FPS - (Date.now() - begin);
+      setTimeout(processVideo, delay);
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 function initialize() {
- let video = document.getElementById('videoInput');
- src = new cv.Mat(video.height, video.width, cv.CV_8UC4);
- dst = new cv.Mat(video.height, video.width, cv.CV_8UC1);
- roi = new cv.Rect(video.width/2 - video.width/4, video.height/2 - video.height/4,
+  let video = document.getElementById('videoInput');
+  src = new cv.Mat(video.height, video.width, cv.CV_8UC4);
+  dst = new cv.Mat(video.height, video.width, cv.CV_8UC1);
+  roi = new cv.Rect(video.width/2 - video.width/4, video.height/2 - video.height/4,
    video.width/2, video.height/2);
-
-   video.addEventListener('click', captureFont);
+  video.addEventListener('click', captureFont);
 }
 
 function start() {
