@@ -10,7 +10,7 @@
   <form name="test">
     <input type="button" value="Start" onClick="start()">
     <input type="button" value="Stop" onClick="stop()">
-    <input type="button" value="Capture" onClick="capture()">
+    <input type="button" value="Capture" onClick="captureFont()">
   </form>
   <div class="inputoutput">
     <video id="videoInput" width="640" height="480" ></video>
@@ -79,7 +79,7 @@ function stop() {
   cap = null;
 }
 
-function capture() {
+function captureFont() {
   cap.read(src);
   dst = binalize(src);
   cv.imshow('canvasOutput', dst);
