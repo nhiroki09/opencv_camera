@@ -13,7 +13,7 @@
     <input type="button" value="Capture" onClick="captureFont()">
   </form>
   <div class="inputoutput">
-    <video id="videoInput" width="640" height="480" ></video>
+    <video id="videoInput" width="320" height="240" ></video>
     <canvas id="canvasOutput" ></canvas>
   </div>
   </div>
@@ -24,37 +24,34 @@
 const FPS = 30;
 let localStream = null;
 let src = null;
+let rois = [];
 let dst = null;
 let cap = null;
 let roi = null;
-let work0 = null;
-let labels = null;
 
-function binalize(src) {
-  let work = src.roi(roi);
+function binalize(roi0, roi1, roi2) {
   dst = new cv.Mat();
-  cv.kmeansThresholding(work, dst);
-  work.delete();
+  cv.kmeansThresholding(roi0, roi1, roi2, dst);
   return dst;
 }
 
-/*
 function processVideo() {
     try {
         let begin = Date.now();
         // start processing.
-       //cap.read(src);
-       //dst = binalize(src);
-       //cv.imshow('canvasOutput', dst);
+        cap.read(src);
+        if (rois.length == 3) {
+          let it = rois.shift();
+          it.delete();
+        }        
+        rois.push(src.roi(roi));
         // schedule the next one.
         let delay = 1000/FPS - (Date.now() - begin);
         setTimeout(processVideo, delay);
-        //dst.delete();
     } catch (err) {
         console.error(err);
     }
-};
-*/
+}
 
 function initialize() {
  let video = document.getElementById('videoInput');
@@ -68,24 +65,28 @@ function initialize() {
 
 function start() {
   let video = document.getElementById("videoInput");
+  rois = [];
   navigator.mediaDevices.getUserMedia({video: {facingMode:'environment'}, audio: false})
     .then(function(stream) {
       video.srcObject = stream;
       video.play();
       localStream = stream;
       cap = new cv.VideoCapture(video);
-      //setTimeout(processVideo, 0);
+      setTimeout(processVideo, 0);
   });
 }
 
 function stop() {
   localStream.getVideoTracks()[0].stop();
   cap = null;
+  while (rois.length > 0) {
+    let it = rois.shift();
+    it.delete();
+  }
 }
 
 function captureFont() {
-  cap.read(src);
-  dst = binalize(src);
+  let dst = binalize(rois[0], rois[1], rois[2]);
   cv.imshow('canvasOutput', dst);
   dst.delete();
 }
