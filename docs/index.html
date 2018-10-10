@@ -8,8 +8,8 @@
 <p id="status">OpenCV.js is loading...</p>
 <div>
   <form name="test">
-    <input type="button" value="Start" onClick="start()">
-    <input type="button" value="Stop" onClick="stop()">
+    <input id="videoStart" type="button" value="Start" onClick="start()" style="display:block"> 
+    <input id="videoStop" type="button" value="Stop" onClick="stop()" style="display:none" >
   </form>
   <p>click to capture</p>
   <div class="inputoutput">
@@ -17,8 +17,6 @@
     <canvas id="canvasOutput" ></canvas>
   </div>
   </div>
-  <br>
-  <br>
 </div>
 <script type="text/javascript">
 const FPS = 30;
@@ -64,6 +62,11 @@ function initialize() {
 }
 
 function start() {
+  let btn0 = document.getElementById("videoStart");
+  let btn1 = document.getElementById("videoStop");
+  btn0.style.display = "none";
+  btn1.style.display = "block";
+  
   let video = document.getElementById("videoInput");
   rois = [];
   navigator.mediaDevices.getUserMedia({video: {facingMode:'environment'}, audio: false})
@@ -78,6 +81,11 @@ function start() {
 }
 
 function stop() {
+  let btn0 = document.getElementById("videoStart");
+  let btn1 = document.getElementById("videoStop");
+  btn0.style.display = "block";
+  btn1.style.display = "none";
+
   localStream.getVideoTracks()[0].stop();
   localStream = null;
   cap = null;
@@ -85,12 +93,17 @@ function stop() {
     let it = rois.shift();
     it.delete();
   }
+  rois = [];
 }
 
 function captureFont() {
-  let dst = binalize(rois[0], rois[1], rois[2]);
-  cv.imshow('canvasOutput', dst);
-  dst.delete();
+  let begin = Date.now();
+  if (rois && rois.length == 3 && rois[0] && rois[1] && rois[2]) {
+    let dst = binalize(rois[0], rois[1], rois[2]);
+    cv.imshow('canvasOutput', dst);
+    dst.delete();
+  }
+   console.log(Date.now()-begin);
 }
 
 function onOpenCvReady() {
