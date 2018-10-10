@@ -13,7 +13,10 @@
   </form>
   <p>click to capture</p>
   <div class="inputoutput">
+    <!--
     <video id="videoInput" width="320" height="240" autoplay playsinline></video>
+    -->
+    <video id="videoInput" autoplay playsinline></video>
     <canvas id="canvasOutput" ></canvas>
   </div>
   </div>
@@ -35,7 +38,6 @@ function binalize(roi0, roi1, roi2) {
 function processVideo() {
   try {
     if (! localStream) {
-      src.delete();
       return;
     }
       let begin = Date.now();
@@ -93,6 +95,7 @@ function stop() {
     let it = rois.shift();
     it.delete();
   }
+  src.delete();
   rois = [];
 }
 
