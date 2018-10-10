@@ -8,7 +8,7 @@
 <p id="status">OpenCV.js is loading...</p>
 <div>
   <form name="test">
-    <input id="videoStart" type="button" value="Start" onClick="start()" style="display:block"> 
+    <input id="videoStart" type="button" value="Start" onClick="start()" style="display:block" disabled="disabled"> 
     <input id="videoStop" type="button" value="Stop" onClick="stop()" style="display:none" >
   </form>
   <p>click to capture</p>
@@ -57,6 +57,8 @@ function processVideo() {
 }
 
 function initialize() {
+  let btn0 = document.getElementById("videoStart");
+  btn0.disabled = "";
   let video = document.getElementById('videoInput');
   roi = new cv.Rect(video.width/2 - video.width/4, video.height/2 - video.height/4,
    video.width/2, video.height/2);
