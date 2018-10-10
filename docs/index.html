@@ -29,7 +29,7 @@ let rois = [];
 let cap = null;
 let roi = null;
 
-function binalize(roi0, roi1, roi2) {
+function binarize(roi0, roi1, roi2) {
   dst = new cv.Mat();
   cv.kmeansThresholding(roi0, roi1, roi2, dst);
   return dst;
@@ -102,7 +102,7 @@ function stop() {
 function captureFont() {
   let begin = Date.now();
   if (rois && rois.length == 3 && rois[0] && rois[1] && rois[2]) {
-    let dst = binalize(rois[0], rois[1], rois[2]);
+    let dst = binarize(rois[0], rois[1], rois[2]);
     cv.imshow('canvasOutput', dst);
     dst.delete();
   }
