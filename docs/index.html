@@ -1,11 +1,11 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Hello OpenCV.js</title>
+<title>binarize demo</title>
 </head>
 <body>
-<h2>OpenCV sample</h2>
-<p id="status">OpenCV.js is loading...</p>
+<h2>Demo</h2>
+<p id="status">loading...</p>
 <div>
   <form name="test">
     <input id="videoStart" type="button" value="Start" onClick="start()" style="display:block" disabled="disabled"> 
@@ -89,7 +89,6 @@ function stop() {
   let btn1 = document.getElementById("videoStop");
   btn0.style.display = "block";
   btn1.style.display = "none";
-
   localStream.getVideoTracks()[0].stop();
   localStream = null;
   cap = null;
@@ -113,7 +112,7 @@ function captureFont() {
 
 function onOpenCvReady() {
   cv['onRuntimeInitialized'] = () => {
-    document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
+    document.getElementById('status').innerHTML = 'ready.';
     initialize();
   }
 }
